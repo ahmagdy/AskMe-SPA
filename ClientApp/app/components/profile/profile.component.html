@@ -1,0 +1,35 @@
+<div class="card">
+  <img [src]="this.user.imageUrl || 'https://via.placeholder.com/250x250'  " width="200px" height="200px" alt="" class="card-img-top rounded-circle mx-auto d-block">
+  <div class="card-block">
+    <h5 class="card-title text-center"> {{this.user.name}}</h5>
+    <div class="card-text mx-auto alertsize">
+
+      <div *ngIf="user.description" class="alert alert-info text-center" dir="auto" role="alert">
+        {{this.user.description}}
+      </div>
+      <div class="form-group ">
+        <label>Type Your Message For Me:</label>
+        <textarea #mes class="form-control" rows="5" placeholder="Write....." required></textarea>
+      </div>
+      <button (click)="submitMessage(mes)" class="btn btn-primary btn-lg d-block mx-auto">Send</button>
+      <hr>
+
+      <div *ngIf="questionsWithAnswers">
+        <div *ngFor="let mes of questionsWithAnswers">
+          <div class="card">
+            <div class="card-block">
+              <h4 dir="auto" class="card-title">{{mes.content}}</h4>
+              <h6 class="card-subtitle mb-2 text-muted">{{mes.submissionDate|date}}</h6>
+              <p dir="auto" class="card-text" *ngIf="mes.reply">{{mes.reply}}</p>
+              <!-- <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a> -->
+            </div>
+          </div>
+          <br>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

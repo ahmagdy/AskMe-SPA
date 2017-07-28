@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-6 col-sm-5">
+    <div class="card">
+      <div class="card-header">
+        Holla
+      </div>
+      <div class="card-block">
+        <h4 class="card-title"> <strong>Hold on!</strong> You have <span class="badge badge-info">{{messagesCount}}</span> Messages.</h4>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a [routerLink]="['../messages']" class="btn btn-primary">Read Your Messages</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-sm-5">
+    <div class="card">
+      <div class="card-header">
+        Share
+      </div>
+      <div class="card-block">
+        <h5>Your Profile URL:</h5>
+        <a [routerLink]="['/profile']">{{getProfileUrl()}}</a>
+        <hr>
+        <h4 class="card-title"> Share Your Profile On.</h4>
+        <div class="card-text">
+          <share-buttons [url]="getProfileUrl()" [title]="'What do you think about me?'" [description]="'Tell Me'" [tags]="'askme'"></share-buttons>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<br>
+<div class="alert alert-info" role="alert">
+  <strong>Hold on!</strong> You have <span class="badge badge-info">{{messagesCount}}</span> Messages.
+</div>

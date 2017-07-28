@@ -1,0 +1,21 @@
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Message</th>
+      <th>Date</th>
+      <th>Visible | Delete</th>
+      <th>Reply</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let message of messages">
+      <th scope="row"></th>
+      <td>{{message.content}}</td>
+      <td>{{message.submissionDate | date}}</td>
+      <td *ngIf="message.isVisible"><span class="badge badge-info"> Visible</span>&nbsp; <button class="btn btn-warning btn-sm" (click)="reverseVisible(message.id,message.isVisible)">Change</button>        &nbsp; <button class="btn btn-danger btn-sm" (click)="deleteMessage(message.id)">Delete</button></td>
+      <td *ngIf="!message.isVisible"><span class="badge badge-default">InVisible </span>&nbsp;<button class="btn btn-warning btn-sm" (click)="reverseVisible(message.id,message.isVisible)">Change</button>        &nbsp; <button class="btn btn-danger btn-sm" (click)="deleteMessage(message.id)">Delete</button></td>
+      <td><button type="button" class="btn" [ngClass]="message.reply? 'btn-info' : 'btn-primary'" (click)="navigateToReply(message)">Reply</button></td>
+    </tr>
+  </tbody>
+</table>

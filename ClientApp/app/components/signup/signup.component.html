@@ -1,0 +1,78 @@
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title text-center"><span class="badge badge-primary">Signup</span></h4>
+    <div class="container">
+      <form class="form" #f="ngForm" (ngSubmit)="onFormSubmit(f.value)" novalidate >
+
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+          <div class="col-md-5">
+            <input type="text" [(ngModel)]="user.name" #name="ngModel" class="form-control" required name="name" placeholder="Name">
+            <small class="form-control-feedback text-danger" [hidden]="name.valid || (name.pristine&& name.untouched && !f.submitted)">
+              Shouldn't be empty
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">Username</label>
+          <div class="col-md-5">
+            <input type="text" [(ngModel)]="user.username" #username="ngModel" class="form-control" required name="username" placeholder="Username">
+            <small class="form-control-feedback text-danger" [hidden]="username.valid || (username.pristine&& username.untouched && !f.submitted)">
+              Shouldn't be empty
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+          <div class="col-md-5">
+            <input type="email" [(ngModel)]="user.email" #email="ngModel" class="form-control" required name="email" placeholder="Email"
+              pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+            <small class="form-control-feedback text-danger" [hidden]="email.valid || (email.pristine && email.untouched && !f.submitted)">
+              Should be Valid Email
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Password</label>
+          <div class="col-md-5">
+            <input type="password" [(ngModel)]="user.password" minlength="6" #password="ngModel" required class="form-control" name="password"
+              placeholder="Password">
+            <small class="form-control-feedback text-danger" [hidden]="password.valid || (password.pristine&& password.untouched && !f.submitted)">
+              Shouldn't be less than 6 digits/chars.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Image</label>
+          <div class="col-md-5">
+            <input type="file" #imgInput required accept="image/*" class="form-control" name="image">
+            <!-- <small class="form-control-feedback text-danger" [hidden]="imgInput.valid || (imgInput.pristine&& imgInput.untouched && !f.submitted)">
+              Shouldn't be empty.
+            </small> -->
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Description</label>
+          <div class="col-md-5">
+            <textarea class="form-control" [(ngModel)]="user.description" #description="ngModel" required name="description"></textarea>
+            <small class="form-control-feedback text-danger" [hidden]="description.valid || (description.pristine&& description.untouched && !f.submitted)">
+                Shouldn't be empty
+              </small>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="offset-sm-2 col-sm-10">
+            <button type="submit" [disabled]="!f.form.valid" class="btn btn-primary">SignUp</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

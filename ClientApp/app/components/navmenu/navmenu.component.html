@@ -1,0 +1,20 @@
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" [routerLink]="['']">AskMe</a>
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['']">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="['about']">About</a>
+            </li>
+        </ul>
+        <button class="btn btn-primary" [routerLinkActive]="['active']" [routerLink]="['login']" *ngIf="!service.isAuthenticated" >Login</button>
+        <button class="btn btn-primary" [routerLinkActive]="['active']" [routerLink]="['signup']" *ngIf="!service.isAuthenticated">Signup</button>
+        <button class="btn btn-primary" [routerLinkActive]="['active']" [routerLink]="['profile']" *ngIf="service.isAuthenticated">Profile</button>
+        <button class="btn btn-primary" [routerLinkActive]="['active']" [routerLink]="['dashboard']" *ngIf="service.isAuthenticated">Dashboard</button>
+        <button class="btn btn-primary" [routerLinkActive]="['active']" (click)="logout()" *ngIf="service.isAuthenticated">Signout</button>
+    </div>
+</nav>

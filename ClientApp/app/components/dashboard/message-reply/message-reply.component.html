@@ -1,0 +1,11 @@
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title">{{message.content}}</h4>
+    <h6 class="card-subtitle mb-2 text-muted">{{message.submissionDate|date}}</h6>
+    <p class="card-text">Ansewer this message if you want. when you answer this message will be visible</p>
+    <textarea class="form-control" name="reply" [(ngModel)]="message.reply"></textarea>
+    <hr>
+    <button class="btn btn-primary" (click)="submit()" [disabled]="message.reply == '' ||message.reply == null ">Reply</button>
+    <a class="card-link" [routerLink]="['/dashboard/messages']">Cancel</a>
+  </div>
+</div>
