@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommService } from "../../services/comm.service";
@@ -9,8 +10,8 @@ import { SnotifyService } from "ng-snotify";
 })
 export class HomeComponent implements OnInit {
 
-    constructor(private toast: SnotifyService, private http: HttpClient) { }
+    constructor(private toast: SnotifyService, private http: HttpClient, private title: Title) { }
 
-    ngOnInit() { }
+    ngOnInit() { this.title.setTitle('Home'); }
 
 }

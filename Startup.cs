@@ -100,9 +100,9 @@ namespace WebApplicationBasic
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            //var options = new RewriteOptions()
-            //                .AddRedirectToHttps();
-            //app.UseRewriter(options);
+            var options = new RewriteOptions()
+                            .AddRedirectToHttps();
+            app.UseRewriter(options);
 
             if (env.IsDevelopment())
             {

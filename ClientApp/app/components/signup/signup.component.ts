@@ -1,6 +1,8 @@
 import { AuthService } from './../../services/auth.service';
 import { IUser } from "./../../interfaces/IUser";
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-signup",
@@ -10,9 +12,11 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 export class SignupComponent implements OnInit {
   @ViewChild('imgInput') imgInput;
   user: IUser = <IUser>{};
-  constructor(private service: AuthService) { }
+  constructor(private service: AuthService,private router:Router,private title:Title) { }
 
   ngOnInit() {
+      if (this.service.isAuthenticated) this.router.navigate(['/dashboard']);
+      this.title.setTitle('Signup Page');
   }
 
   onFormSubmit(x) {
