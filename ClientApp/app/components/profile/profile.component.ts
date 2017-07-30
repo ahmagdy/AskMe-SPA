@@ -56,7 +56,8 @@ export class ProfileComponent implements OnInit {
 
   loadMessages(username: string) {
     this.service.getVisibleMessages(username)
-      .subscribe(res => {
+        .subscribe(res => {
+            res = res.reverse();
         this.questionsWithAnswers = res;
       });
   }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Aspcorespa.Models
 
         public virtual string Reply { get; set; }
 
+        [DataType(DataType.DateTime)]
         public virtual DateTime SubmissionDate { get; set; }
 
         public virtual bool IsVisible { get; set; }

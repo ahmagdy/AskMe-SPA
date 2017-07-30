@@ -8,9 +8,10 @@ using Aspcorespa.Context;
 namespace Aspcorespa.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170730141400_Change date in message to datetime type")]
+    partial class Changedateinmessagetodatetimetype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

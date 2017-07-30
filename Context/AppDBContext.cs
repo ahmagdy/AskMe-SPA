@@ -19,7 +19,7 @@ namespace Aspcorespa.Context
             base.OnModelCreating(builder);
             builder.Entity<Message>()
                     .Property(x => x.SubmissionDate)
-                    .HasDefaultValue(DateTime.Now);
+                    .HasDefaultValueSql("getutcdate()");
 
             builder.Entity<UserEntity>()
                     .Property(x => x.CreatedAt)
