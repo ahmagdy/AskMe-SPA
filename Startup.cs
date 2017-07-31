@@ -121,19 +121,20 @@ namespace WebApplicationBasic
              CreateRoles(serviceProvider).Wait();
 
             var siginKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("I Like to eat, like food."));
+            var tokenParams = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = siginKey,
+                ValidateLifetime = false,
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
 
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
-                TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = siginKey,
-                    ValidateLifetime = false,
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                }
+                TokenValidationParameters = tokenParams
             });
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -144,14 +145,7 @@ namespace WebApplicationBasic
                 CookieName = "access_token",
                 TicketDataFormat = new CustomJwtDataFormat(
                    SecurityAlgorithms.HmacSha256,
-                   new TokenValidationParameters //Duplication create variable 
-                   {
-                       ValidateIssuerSigningKey = true,
-                       IssuerSigningKey = siginKey,
-                       ValidateLifetime = false,
-                       ValidateIssuer = false,
-                       ValidateAudience = false
-                   })
+                   tokenParams)
             });
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -189,12 +183,10 @@ namespace WebApplicationBasic
                 var roleExist = await RoleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    //create the roles and seed them to the database: Question 1
                     roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
 
-            //Here you could create a super user who will maintain the web app
             var poweruser = new UserEntity
             {
 
@@ -202,7 +194,6 @@ namespace WebApplicationBasic
                 Email ="a@a.com",
                 Name= "AdminUser"
             };
-            //Ensure you have these values in your appsettings.json file
             string userPWD = "aaa111";
             var _user = await UserManager.FindByEmailAsync("a@a.com");
 
@@ -211,7 +202,6 @@ namespace WebApplicationBasic
                 var createPowerUser = await UserManager.CreateAsync(poweruser, userPWD);
                 if (createPowerUser.Succeeded)
                 {
-                    //here we tie the new user to the role
                     await UserManager.AddToRoleAsync(poweruser, "admin");
 
                 }
