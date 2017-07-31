@@ -33,8 +33,7 @@ export class AuthService {
     //   return new RequestOptions({ headers: header });
     // }
 
-    register(user: IUser, img: File) {
-        console.log(user);
+    register(user: IUser, img: File, toastId: number) {
         const fd = new FormData();
 
         for (var k in user) {
@@ -42,11 +41,14 @@ export class AuthService {
         }
         fd.append('image', img);
         fd.append('ImageUrl', 'texttest');
-        this.http.post("/api/authapi/signup", fd)
+        this.http.post<{ token: any, user: any, role: any }>("/api/authapi/signup", fd)
             .subscribe(res => {
-                this.successHandler('SignedUp Successfully please login');
-                this.router.navigate(['/']);
-                //TODO Login
+                this.toast.remove(toastId);
+                res.user.role = res.role;
+                delete res.user.password;
+                this.ck.putObject(this.userCK, res.user, { secure: true });
+                this.successHandler('SignedUp Successfully');
+                this.router.navigate(['/dashboard']);
 
             }, error => {
                 console.log(error);

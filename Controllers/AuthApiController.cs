@@ -54,12 +54,13 @@ namespace Aspcorespa.Controllers
             {
                 return BadRequest(ModelState.Values.SelectMany(v => v.Errors).Select(v => v.ErrorMessage).ToList());
             }
-            if (context.Users.Any(u => u.Email == model.Email)) return BadRequest(new { message="Email already exsists" });
+            if (context.Users.Any(u => u.Email == model.Email)) return BadRequest(new { message = "Email already exsists" });
 
 
             var imgPath = await FileOperations.SaveImageAsync(image, _environment);
-            
-            var user = new UserEntity { UserName = model.Username, Email = model.Email, Name = model.Name, ImageUrl=imgPath, Description = model.Description };
+
+            var user = new UserEntity { UserName = model.Username, Email = model.Email, Name = model.Name, ImageUrl = imgPath, Description = model.Description };
+            var defaultUserRole = "user";
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -67,10 +68,20 @@ namespace Aspcorespa.Controllers
                 return BadRequest(result.Errors.Select(x => x.Description).ToList());
             }
 
-            await _userManager.AddToRoleAsync(user, "user");
+            await _userManager.AddToRoleAsync(user, defaultUserRole);
+            var token = CreateJwtPacket(user, new string[] { defaultUserRole });
 
-            //await _signInManager.SignInAsync(user, false);
-            return Ok();
+            //Set Token with HTTPOnly from Server Side 
+            Response.Cookies.Append("access_token", token, new CookieOptions { HttpOnly = true, Secure = true });
+
+            var userView = new UserViewModel { Name = user.Name, Username = user.UserName, Description = user.Description, Email = user.Email, ImageUrl = user.ImageUrl };
+
+            return Ok(new
+            {
+                token,
+                user = userView,
+                role = defaultUserRole
+            });
         }
 
         [HttpPost("login")]
@@ -101,7 +112,7 @@ namespace Aspcorespa.Controllers
             {
                  token,
                 User,
-                Role = userRole.FirstOrDefault()
+                role = userRole.FirstOrDefault()
             });
           
         }
