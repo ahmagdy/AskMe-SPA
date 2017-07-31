@@ -32,9 +32,7 @@ export class MessageReplyComponent implements OnInit {
 
   }
 
-  submit() {
-    console.log(this.message);
-   
+  submit() {   
     if (/^\s*$/.test(this.message.reply)) {
       this.toast.warning('Enter a Valid Reply', 'Wrong!!!', { timeout: 5000 });
     } else {
