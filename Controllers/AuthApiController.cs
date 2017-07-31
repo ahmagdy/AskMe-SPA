@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Aspcorespa.Context;
 using Microsoft.EntityFrameworkCore;
+using Aspcorespa.ExtOperations;
 
 namespace Aspcorespa.Controllers
 {
@@ -48,28 +49,6 @@ namespace Aspcorespa.Controllers
         {
 
             if (Request.Form.Files.Count < 1) return BadRequest(new { message = "No Image Found" });
-            #region OldCode
-            //var imageFile = Request.Form.Files[0];
-
-            ////var model = new UserViewModel();
-
-            //Request.Form.TryGetValue("name", out var name);
-            //model.Name = name[0];
-
-            //Request.Form.TryGetValue("username", out var username);
-            //model.Username = username[0];
-
-            //Request.Form.TryGetValue("email", out var email);
-            //model.Email = email[0];
-
-            //Request.Form.TryGetValue("password", out var password);
-            //model.Password = password[0];
-
-            //Request.Form.TryGetValue("description", out var description);
-            //model.Description = description[0];
-
-            //model.ImageUrl = "http";
-            #endregion
 
             if (!ModelState.IsValid)
             {
@@ -78,14 +57,7 @@ namespace Aspcorespa.Controllers
             if (context.Users.Any(u => u.Email == model.Email)) return BadRequest(new { message="Email already exsists" });
 
 
-            var folderName = Path.Combine(_environment.WebRootPath, "uploads");
-            var extension = Path.GetExtension(image.FileName);
-            var imgPath = Path.Combine(folderName, $"{Path.GetRandomFileName()}{extension}");
-            using (var fileStream =new FileStream(imgPath, FileMode.Create))
-            {
-                await image.CopyToAsync(fileStream);
-            }
-
+            var imgPath = await FileOperations.SaveImageAsync(image, _environment);
             
             var user = new UserEntity { UserName = model.Username, Email = model.Email, Name = model.Name, ImageUrl=imgPath, Description = model.Description };
 

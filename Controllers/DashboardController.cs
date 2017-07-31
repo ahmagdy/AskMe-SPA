@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Aspcorespa.Context;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Aspcorespa.ExtOperations;
 
 namespace Aspcorespa.Controllers
 {
@@ -66,19 +67,14 @@ namespace Aspcorespa.Controllers
             if (model == null) return BadRequest();
             if(image != null)
             {
-                var folderName = Path.Combine(_environment.WebRootPath, "uploads");
-                var extension = Path.GetExtension(image.FileName);
-                var imgPath = Path.Combine(folderName, $"{Path.GetRandomFileName()}{extension}");
-                using (var fileStream = new FileStream(imgPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(fileStream);
-                }
+                var imgPath = await FileOperations.SaveImageAsync(image, _environment);
                 model.ImageUrl = imgPath;
+
                 var currUserDetails = await GetCurrentUserAccount();
                 if(currUserDetails.ImageUrl != null)
                 {
                     var currentImage = currUserDetails.ImageUrl;
-                    System.IO.File.Delete(currentImage);
+                    FileOperations.DeleteImage(currentImage);
                 }
             }
             var user = userRepo.UpdateUserDetails(model);
