@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,17 +6,13 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Aspcorespa.Context;
 using Aspcorespa.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using Aspcorespa;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +42,7 @@ namespace WebApplicationBasic
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminAreaOnly", policy => policy.RequireRole("admin"));
+                options.AddPolicy("MembersOnly", policy => policy.RequireRole("user", "admin"));
             });
             services.AddEntityFrameworkSqlServer();
             services.AddDbContext<AppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DBCNS")));
@@ -63,21 +58,45 @@ namespace WebApplicationBasic
                     RequireNonAlphanumeric = false,
                     RequireUppercase = false
                 };
-
-                config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents
-                {
-                    OnRedirectToLogin = ctx =>
-                    {
-                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                        {
-                            ctx.Response.StatusCode = 401;
-                            return Task.FromResult<object>(null);
-                        }
-                        ctx.Response.Redirect(ctx.RedirectUri);
-                        return Task.FromResult<object>(null);
-                    }
-                };
             });
+
+            var siginKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("I Like to eat, like food."));
+            var tokenParams = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = siginKey,
+                ValidateLifetime = false,
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+
+
+            services.AddAuthentication()
+                        .AddCookie("Cookie",opt =>
+                        {
+                            opt.Cookie.Name = "access_token";
+                            opt.Events = new CookieAuthenticationEvents
+                            {
+                                OnRedirectToLogin = ctx =>
+                                {
+                                    if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                                    {
+                                        ctx.Response.StatusCode = 401;
+                                        return Task.FromResult<object>(null);
+                                    }
+                                    ctx.Response.Redirect(ctx.RedirectUri);
+                                    return Task.FromResult<object>(null);
+                                }
+                            };
+                            opt.TicketDataFormat = new CustomJwtDataFormat(
+                                                       SecurityAlgorithms.HmacSha256,
+                                                       tokenParams);
+                        })
+                        .AddJwtBearer("Bearer", opt => {
+                            opt.TokenValidationParameters = tokenParams;
+                        });
+
+
 
             services.AddCors(options => options.AddPolicy("Cors", builder =>
              {
@@ -120,38 +139,11 @@ namespace WebApplicationBasic
 
              CreateRoles(serviceProvider).Wait();
 
-            var siginKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("I Like to eat, like food."));
-            var tokenParams = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = siginKey,
-                ValidateLifetime = false,
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
-
-            app.UseJwtBearerAuthentication(new JwtBearerOptions
-            {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                TokenValidationParameters = tokenParams
-            });
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                AuthenticationScheme = "Cookie",
-                CookieName = "access_token",
-                TicketDataFormat = new CustomJwtDataFormat(
-                   SecurityAlgorithms.HmacSha256,
-                   tokenParams)
-            });
-
+   
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             app.UseStaticFiles();
 

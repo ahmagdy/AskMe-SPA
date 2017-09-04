@@ -10,7 +10,7 @@ namespace Aspcorespa.Controllers
 {
     [Produces("application/json")]
     [Route("api/messages")]
-    [Authorize(ActiveAuthenticationSchemes = "Cookie,Bearer")]
+    [Authorize(AuthenticationSchemes = "Cookie,Bearer")]
     public class MessagesController : Controller
     {
         private readonly IMessageRepository context;

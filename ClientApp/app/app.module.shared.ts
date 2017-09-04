@@ -1,5 +1,7 @@
-import { ChangePasswordComponent } from './components/dashboard/user-info/change-password/change-password.component';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component'
@@ -17,15 +19,12 @@ import { MessageReplyComponent } from "./components/dashboard/message-reply/mess
 import { UserInfoComponent } from "./components/dashboard/user-info/user-info.component";
 import { UserEditComponent } from "./components/dashboard/user-info/user-edit/user-edit.component";
 import { AuthGuard } from "./services/auth-guard.service";
-import { FormsModule } from "@angular/forms";
 import { AboutComponent } from "./components/about/about.component";
 
 import { ShareButtonsModule } from 'ngx-sharebuttons';
+import { ChangePasswordComponent } from "./components/dashboard/user-info/change-password/change-password.component";
 
-
-
-export const sharedConfig: NgModule = {
-    bootstrap: [AppComponent],
+@NgModule({
     declarations: [
         AppComponent,
         NavMenuComponent,
@@ -43,6 +42,12 @@ export const sharedConfig: NgModule = {
         AboutComponent
     ],
     imports: [
+        CommonModule,
+        HttpModule,
+        FormsModule,
+        SnotifyModule,
+        CookieModule.forRoot(),
+        ShareButtonsModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
@@ -67,10 +72,8 @@ export const sharedConfig: NgModule = {
                 ]
             },
             { path: '**', redirectTo: 'home' }
-        ]),
-        SnotifyModule,
-        CookieModule.forRoot(),
-        ShareButtonsModule.forRoot(),
-        FormsModule
+        ])
     ]
-};
+})
+export class AppModuleShared {
+}

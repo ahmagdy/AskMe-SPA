@@ -6,7 +6,7 @@ import { AuthService } from "../../services/auth.service";
     templateUrl: './navmenu.component.html'
 })
 export class NavMenuComponent {
-    constructor(private service: AuthService) { }
+    constructor(public service: AuthService) { }
 
     logout() { this.service.logout();}
 }

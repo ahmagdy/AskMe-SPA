@@ -16,7 +16,7 @@ namespace Aspcorespa.Controllers
 {
     [Produces("application/json")]
     [Route("api/dashboard")]
-    [Authorize(ActiveAuthenticationSchemes = "Cookie,Bearer")]
+    [Authorize(AuthenticationSchemes  = "Cookie,Bearer")]
 
     public class DashboardController : Controller
     {
@@ -47,7 +47,7 @@ namespace Aspcorespa.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("")]
         public async Task<IActionResult> Get()
         {
             var user = await GetCurrentUserAccount();

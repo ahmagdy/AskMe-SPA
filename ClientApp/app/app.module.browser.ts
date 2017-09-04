@@ -1,27 +1,25 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-// import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
-import { sharedConfig } from './app.module.shared';
+import { AppModuleShared } from './app.module.shared';
+import { AppComponent } from './components/app/app.component';
+import { HttpModule } from "@angular/http";
+import { HttpClientModule } from "@angular/common/http";
+
 import { SnotifyService } from "ng-snotify";
 import { AuthGuard } from "./services/auth-guard.service";
 import { AuthService } from "./services/auth.service";
 import { CommService } from "./services/comm.service";
-import { HttpModule } from "@angular/http";
 
 @NgModule({
-    bootstrap: sharedConfig.bootstrap,
-    declarations: sharedConfig.declarations,
+    bootstrap: [ AppComponent ],
     imports: [
         BrowserModule,
-        FormsModule,
-         HttpModule,
+        HttpModule,
         HttpClientModule,
-        ...sharedConfig.imports
+        AppModuleShared
     ],
     providers: [
-        { provide: 'ORIGIN_URL', useValue: location.origin },
+        { provide: 'BASE_URL', useFactory: getBaseUrl },
         SnotifyService,
         AuthService,
         AuthGuard,
@@ -29,4 +27,8 @@ import { HttpModule } from "@angular/http";
     ]
 })
 export class AppModule {
+}
+
+export function getBaseUrl() {
+    return document.getElementsByTagName('base')[0].href;
 }

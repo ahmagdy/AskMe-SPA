@@ -1,23 +1,22 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="og:title" content="AskMe WebSite" />
-        <meta name="og:description" content="he idea of this site to enable you to tell people anonymously about any thing you think about him and enable the person
-        you send message to see it and reply it if he want ." />
-        <meta name="og:image:url" content="https://via.placeholder.com/700x500" />
-        <title>@ViewData["Title"]</title>
-        <base href="/" />
-        <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    </head>
-    <body>
-        <div class="container">
-            @RenderBody()
-        </div>
-        
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - core2__0SPA</title>
+    <base href="~/" />
 
-        @RenderSection("scripts", required: false)
-    </body>
+    <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
+    <link href="~/assets/custom.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    @RenderSection("scripts", required: false)
+</body>
 </html>
+
